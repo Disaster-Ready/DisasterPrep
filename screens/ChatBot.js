@@ -9,6 +9,11 @@ import { Feather } from "@expo/vector-icons";
 import { GiftedChat, Bubble, Time } from "react-native-gifted-chat";
 import uuid from "react-native-uuid";
 
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI("REDACTED");
+const model = genAI.getGenerativeModel({model:"gemini-pro"});
+
 const ChatBot = ({ navigation }) => {
   const [messages, setMessages] = useState();
   const { colors } = useTheme();
@@ -44,23 +49,24 @@ const ChatBot = ({ navigation }) => {
         user: {
           _id: 2,
           name: "DisasterPal",
-          avatar:
-            "REDACTED",
+          avatar: "assets/dpbot.png",
         },
       },
     ]);
   }, []);
 
   async function getMessageFromServer(msg) {
-    //  console.log(messages);
-    const url = `REDACTED`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.response;
-    // .catch((error) => {
-    //   console.error("Error:", error);
-    // });
+    console.log("I GOT HEREEEE");
+    const prompt = msg[0].text + "Query: Respond one paragraph. Greeting: greet normally. No markdown. If query not about natural disasters and safety, say outside of expertise.";
+    console.log("PROMPT: ", prompt);
+    const result = await model.generateContent(prompt);
+    console.log(result);
+    const response = await result.response;
+    const text = response.text;
+    console.log(text);
+    return text();
   }
+  
 
   const onSend = (msg) => {
     console.log(msg);
@@ -79,7 +85,6 @@ const ChatBot = ({ navigation }) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, message)
     );
-    //  console.log(message);
     getMessageFromServer(msg).then((response) => {
       console.log(response);
       const botMessage = [
@@ -117,7 +122,7 @@ const ChatBot = ({ navigation }) => {
         user={{
           _id: 1,
           avatar:
-            "REDACTED",
+            "assets/dpbot.png",
         }}
         renderTime={(props) => {
           return (
