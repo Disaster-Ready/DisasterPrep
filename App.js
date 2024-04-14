@@ -26,7 +26,8 @@ import WildfireInfo from "./screens/WildfireInfo";
 import WildfireStart from "./screens/WildfireStart";
 import RainstormInfo from "./screens/RainstormInfo";
 import RainstormStart from "./screens/RainstormStart";
-import {ThemeProvider} from "REDACTED";
+import EarthquakeSimulation from "./screens/EarthquakeSimulation";
+import {ThemeProvider} from "./Theme_Handling/ThemeProvider";
 
 const Drawer = createDrawerNavigator();
 
@@ -99,6 +100,10 @@ function RSInfoTitle({ navigation }) {
   return <Text style={{ fontSize: 25, color: "white" }}>Rainstorms</Text>;
 }
 
+function EarthquakeSimTitle({ navigation }) {
+  return <Text style={{ fontSize: 25, color: "white" }}>Earthquake Simulation</Text>;
+}
+
 export default function App() {
 
   const CustDrawer = (props) => {
@@ -132,25 +137,13 @@ export default function App() {
             }}
           />
           <Drawer.Screen
-            name="Info"
-            component={Info}
-            options={({ navigation }) => {
-              return {
-                headerTitle: () => <InfoTitle navigation={navigation} />,
-                drawerIcon: ({ color }) => (
-                  <AntDesign name="infocirlce" size={20} color={color} />
-                ),
-              };
-            }}
-          />
-          <Drawer.Screen
             name="DisasterPal"
             component={DisasterPal}
             options={({ navigation }) => {
               return {
                 headerTitle: () => <DPTitle navigation={navigation} />,
                 drawerIcon: ({ color }) => (
-                  <Ionicons name="settings" size={20} color={color} />
+                  <Entypo name="chat" size={20} color={color} />
                 ),
               };
             }}
@@ -163,7 +156,7 @@ export default function App() {
                 headerTitle: () => <GGTitle navigation={navigation} />,
                 headerStyle: { backgroundColor: "#039C00" },
                 drawerIcon: ({ color }) => (
-                  <Entypo name="message" size={20} color={color} />
+                  <Ionicons name="chatbubbles" size={20} color={color} />
                 ),
               };
             }}
@@ -175,7 +168,19 @@ export default function App() {
               return {
                 headerTitle: () => <SPTitle navigation={navigation} />,
                 drawerIcon: ({ color }) => (
-                  <Entypo name="message" size={20} color={color} />
+                  <Entypo name="tree" size={20} color={color} />
+                ),
+              };
+            }}
+          />
+          <Drawer.Screen
+            name="Info"
+            component={Info}
+            options={({ navigation }) => {
+              return {
+                headerTitle: () => <InfoTitle navigation={navigation} />,
+                drawerIcon: ({ color }) => (
+                  <AntDesign name="infocirlce" size={20} color={color} />
                 ),
               };
             }}
@@ -187,7 +192,7 @@ export default function App() {
               return {
                 headerTitle: () => <ContactTitle navigation={navigation} />,
                 drawerIcon: ({ color }) => (
-                  <Entypo name="message" size={20} color={color} />
+                  <AntDesign name="questioncircleo" size={20} color={color} />
                 ),
               };
             }}
@@ -390,6 +395,34 @@ export default function App() {
               return {
                 headerTitle: () => <RSStartTitle navigation={navigation} />,
                 headerStyle: { backgroundColor: "#4d4d4d" },
+                headerLeft: () => (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      width: 80,
+                      marginLeft: 20,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("Home")}
+                      activeOpacity={0.5}
+                    >
+                      <Ionicons name="ios-home" size={26} color="white" />
+                    </TouchableOpacity>
+                  </View>
+                ),
+                drawerItemStyle: { height: 0 },
+              };
+            }}
+          />
+          <Drawer.Screen
+            name="EarthquakeSimulation"
+            component={EarthquakeSimulation}
+            options={({ navigation }) => {
+              return {
+                headerTitle: () => <EarthquakeSimTitle navigation={navigation} />,
+                headerStyle: { backgroundColor: "#039C00" },
                 headerLeft: () => (
                   <View
                     style={{
