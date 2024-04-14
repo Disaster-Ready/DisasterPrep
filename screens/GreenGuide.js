@@ -8,6 +8,10 @@ import { useTheme } from "../Theme_Handling/ThemeProvider";
 import { Feather } from "@expo/vector-icons";
 import { GiftedChat, Bubble, Time } from "react-native-gifted-chat";
 import uuid from "react-native-uuid";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+const genAI = new GoogleGenerativeAI("REDACTED");
+const model = genAI.getGenerativeModel({model:"gemini-pro"});
 
 const GreenGuide = ({ navigation }) => {
   const [messages, setMessages] = useState();
@@ -45,21 +49,20 @@ const GreenGuide = ({ navigation }) => {
           _id: 2,
           name: "GreenGuide",
           avatar:
-            "REDACTED",
+            "assets/dpbot.png",
         },
       },
     ]);
   }, []);
 
   async function getMessageFromServer(msg) {
-    //  console.log(messages);
-    const url = `REDACTED`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.response;
-    // .catch((error) => {
-    //   console.error("Error:", error);
-    // });
+    const prompt = msg[0].text + "Query: Respond one paragraph. Greeting: greet normally. No markdown. If query not about sustainbility, say outside of expertise.";
+    const result = await model.generateContent(prompt);
+    console.log(result);
+    const response = await result.response;
+    const text = response.text;
+    console.log(text);
+    return text();
   }
 
   const onSend = (msg) => {
@@ -90,7 +93,7 @@ const GreenGuide = ({ navigation }) => {
           user: {
             _id: 2,
             name: "React Native",
-            avatar: "REDACTED",
+            avatar: "assets/dpbot.png",
           },
         },
       ];
@@ -117,7 +120,7 @@ const GreenGuide = ({ navigation }) => {
         user={{
           _id: 1,
           avatar:
-            "REDACTED",
+            "assets/dpbot.png",
         }}
         renderTime={(props) => {
           return (
